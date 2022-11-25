@@ -1,5 +1,11 @@
 cd ~
 apt install pulseaudio -y
+if grep -q "anonymous" ~/../usr/etc/pulse/default.pa;then
+    echo "module already present"
+else
 echo "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" >> ../usr/etc/pulse/default.pa
-echo "pulseaudio --start --exit-idle-time=-1" ~/.bashrc
-pulseaudio --start --exit-idle-time=-1
+fi
+echo "exit-idle-time = -1" >> ~/../usr/etc/pulse/daemon.conf
+echo "Setting exit idle time to -1"
+echo "autospawn = no" >> ~/../usr/etc/pulse/client.conf
+echo "Setting autospawn=no"
