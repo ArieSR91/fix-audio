@@ -2,6 +2,7 @@ cd ~
 apt install pulseaudio -y
 if grep -q "anonymous" ~/../usr/etc/pulse/default.pa;then
     echo "module already present"
+    exit
 else
 echo "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" >> ../usr/etc/pulse/default.pa
 fi
