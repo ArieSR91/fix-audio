@@ -1,12 +1,17 @@
 cd ~
-apt install pulseaudio -y
-if grep -q "anonymous" ~/../usr/etc/pulse/default.pa;then
+if [ -f $PREFIX/bin/pulseaudio ]; then
+    echo "pulseaudio already installed"
+else
+    apt install pulseaudio -y
+fi
+
+if grep -q "anonymous" $PREFIX/etc/pulse/default.pa; then
     echo "module already present"
     exit
 else
-echo "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" >> ../usr/etc/pulse/default.pa
+    echo "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" >> ../usr/etc/pulse/default.pa
 fi
-echo "exit-idle-time = -1" >> ~/../usr/etc/pulse/daemon.conf
 echo "Setting exit idle time to -1"
-echo "autospawn = no" >> ~/../usr/etc/pulse/client.conf
+sed -i "s/exit-idle-time = 20/exit-idle-time = -1/" $PREFIX/etc/pulse/daemon.conf
 echo "Setting autospawn=no"
+sed -i "s/autospawn = yes/autospawn = no/" $PREFIX/etc/pulse/client.conf
